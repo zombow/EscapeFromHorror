@@ -28,5 +28,14 @@ public:
 	
 public:
 	UPROPERTY(EditAnywhere)
+	class USpringArmComponent* springArmComp;
+
+	UPROPERTY(EditAnywhere)
 	class UCameraComponent* cameraComp;
+
+	FVector dir; //플레이어 이동 방향 속성
+
+	void OnAxisMoveForward(float value);
+	void OnAxisMoveRight(float value);
+	void OnActionJump();
 };
