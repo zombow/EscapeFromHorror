@@ -18,9 +18,14 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float speedForward;
+	float speedForward;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float speedRight;
+	float speedRight;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool isInAir;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool isCrouch;
 };

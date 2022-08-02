@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AAn_Player::AAn_Player()
@@ -43,6 +44,7 @@ AAn_Player::AAn_Player()
 void AAn_Player::BeginPlay()
 {
 	Super::BeginPlay();
+	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
 
 }
 
@@ -68,6 +70,10 @@ void AAn_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AAn_Player::OnAxisMoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AAn_Player::OnAxisMoveRight);
 	PlayerInputComponent->BindAction(TEXT("JUMP"), IE_Pressed, this, &AAn_Player::OnActionJump);
+	PlayerInputComponent->BindAction(TEXT("Run"), IE_Pressed, this, &AAn_Player::OnActionRunPressed);
+	PlayerInputComponent->BindAction(TEXT("Run"), IE_Released, this, &AAn_Player::OnActionRunReleased);
+	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Pressed, this, &AAn_Player::OnActionCruchPressed);
+	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Released, this, &AAn_Player::OnActionCruchReleased);
 }
 
 void AAn_Player::OnAxisMoveForward(float value)
@@ -84,3 +90,29 @@ void AAn_Player::OnActionJump()
 {
 	ACharacter::Jump();
 }
+
+void AAn_Player::OnActionRunPressed()
+{
+	if (!isCrouch)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = runSpeed;
+	}
+}
+
+void AAn_Player::OnActionRunReleased()
+{
+	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
+}
+
+void AAn_Player::OnActionCruchPressed()
+{
+	GetCharacterMovement()->MaxWalkSpeed = CruchSpeed;
+	isCrouch = true;
+}
+
+void AAn_Player::OnActionCruchReleased()
+{
+	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
+	isCrouch = false;
+}
+

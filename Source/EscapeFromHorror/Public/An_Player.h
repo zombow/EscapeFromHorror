@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "An_Player.generated.h"
 
+
 UCLASS()
 class ESCAPEFROMHORROR_API AAn_Player : public ACharacter
 {
@@ -34,8 +35,20 @@ public:
 	class UCameraComponent* cameraComp;
 
 	FVector dir; //플레이어 이동 방향 속성
+	float CruchSpeed = 100;
+	float walkSpeed = 150;
+	float runSpeed = 250;
+
+	bool isCrouch;
 
 	void OnAxisMoveForward(float value);
 	void OnAxisMoveRight(float value);
 	void OnActionJump();
+
+
+	void OnActionRunPressed();
+	void OnActionRunReleased();
+	void OnActionCruchPressed();
+	void OnActionCruchReleased();
+
 };
