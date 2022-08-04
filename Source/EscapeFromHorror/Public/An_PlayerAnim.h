@@ -28,4 +28,5 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool isCrouch;
+
 };
