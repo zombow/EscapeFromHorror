@@ -6,6 +6,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "An_PlayerAnim.h"
 
 // Sets default values
 AAn_Player::AAn_Player()

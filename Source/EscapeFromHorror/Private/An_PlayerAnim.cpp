@@ -20,3 +20,4 @@ void UAn_PlayerAnim::NativeUpdateAnimation(float DeltaSeconds)
 		isCrouch = player->isCrouch;
 	}
 }
+
