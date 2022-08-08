@@ -30,14 +30,25 @@ public:
 	bool isCrouch;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<USoundBase*> walkSound;
+		USoundBase* walkSound;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<USoundBase*> runSounds;
+		USoundBase* runSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USoundBase* crouchSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USoundBase* jumpSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USoundBase* randSound;
 
- 
-	UFUNCTION(BlueprintCallable, Category = "WalkSound")
+	UFUNCTION(BlueprintCallable)
 		void WalkSoundPlay();
-
-	UFUNCTION(BlueprintCallable, Category = "RunSound")
+	UFUNCTION(BlueprintCallable)
 		void RunSoundPlay();
+	UFUNCTION(BlueprintCallable)
+		void CrouchSoundPlay();
+	UFUNCTION(BlueprintCallable)
+		void JumpSoundPlay();
+	UFUNCTION(BlueprintCallable)
+		void RandSoundPlay();
+	
 };

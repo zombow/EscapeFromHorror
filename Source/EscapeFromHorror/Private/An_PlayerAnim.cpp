@@ -21,16 +21,31 @@ void UAn_PlayerAnim::NativeUpdateAnimation(float DeltaSeconds)
 		isInAir = movement->IsFalling();
 		isCrouch = player->isCrouch;
 	}
+
 }
 
 void UAn_PlayerAnim::WalkSoundPlay()
 {
-	int index = UKismetMathLibrary::RandomIntegerInRange(0, walkSound.Num() - 1);
-	UGameplayStatics::PlaySound2D(this, walkSound[index]);
+	UGameplayStatics::PlaySound2D(this, walkSound);
 }
 
 void UAn_PlayerAnim::RunSoundPlay()
 {
+	UGameplayStatics::PlaySound2D(this, runSound);
+}
 
+void UAn_PlayerAnim::CrouchSoundPlay()
+{
+	UGameplayStatics::PlaySound2D(this, crouchSound);
+}
+
+void UAn_PlayerAnim::JumpSoundPlay()
+{
+	UGameplayStatics::PlaySound2D(this, jumpSound);
+}
+
+void UAn_PlayerAnim::RandSoundPlay()
+{
+	UGameplayStatics::PlaySound2D(this, randSound);
 }
 
