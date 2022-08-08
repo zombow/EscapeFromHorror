@@ -4,6 +4,8 @@
 #include "An_PlayerAnim.h"
 #include "An_Player.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 void UAn_PlayerAnim::NativeUpdateAnimation(float DeltaSeconds)
 {
@@ -19,5 +21,16 @@ void UAn_PlayerAnim::NativeUpdateAnimation(float DeltaSeconds)
 		isInAir = movement->IsFalling();
 		isCrouch = player->isCrouch;
 	}
+}
+
+void UAn_PlayerAnim::WalkSoundPlay()
+{
+	int index = UKismetMathLibrary::RandomIntegerInRange(0, walkSound.Num() - 1);
+	UGameplayStatics::PlaySound2D(this, walkSound[index]);
+}
+
+void UAn_PlayerAnim::RunSoundPlay()
+{
+
 }
 

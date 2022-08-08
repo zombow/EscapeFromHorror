@@ -29,4 +29,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool isCrouch;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<USoundBase*> walkSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<USoundBase*> runSounds;
+
+ 
+	UFUNCTION(BlueprintCallable, Category = "WalkSound")
+		void WalkSoundPlay();
+
+	UFUNCTION(BlueprintCallable, Category = "RunSound")
+		void RunSoundPlay();
 };
