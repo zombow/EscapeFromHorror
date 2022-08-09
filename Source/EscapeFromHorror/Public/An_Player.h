@@ -50,5 +50,4 @@ public:
 	void OnActionRunReleased();
 	void OnActionCruchPressed();
 	void OnActionCruchReleased();
-
 };
