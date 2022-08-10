@@ -50,5 +50,5 @@ public:
 		void JumpSoundPlay();
 	UFUNCTION(BlueprintCallable)
 		void RandSoundPlay();
-	
+
 };

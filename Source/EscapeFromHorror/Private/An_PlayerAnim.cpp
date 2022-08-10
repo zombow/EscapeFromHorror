@@ -49,3 +49,5 @@ void UAn_PlayerAnim::RandSoundPlay()
 	UGameplayStatics::PlaySound2D(this, randSound);
 }
 
+
+
