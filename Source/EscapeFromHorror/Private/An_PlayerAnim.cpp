@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "An_PlayerMoveComp.h"
 
 void UAn_PlayerAnim::NativeUpdateAnimation(float DeltaSeconds)
 {
@@ -19,8 +20,10 @@ void UAn_PlayerAnim::NativeUpdateAnimation(float DeltaSeconds)
 
 		auto movement = player->GetMovementComponent();
 		isInAir = movement->IsFalling();
-		isCrouch = player->isCrouch;
-	}
+		auto myMoveComp = Cast<UAn_PlayerMoveComp>(player->moveComp);
+		isCrouch = myMoveComp->UAn_PlayerMoveComp::isCrouch;
+
+	};
 
 }
 

@@ -2,17 +2,20 @@
 
 
 #include "An_Player.h"
-#include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Kismet/KismetMathLibrary.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "An_PlayerAnim.h"
+#include "An_PlayerMoveComp.h"
+#include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AAn_Player::AAn_Player()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	moveComp = CreateDefaultSubobject<UAn_PlayerMoveComp>(TEXT("moveComp"));
 	
 	//spring arm생성부
 	springArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("springArmComp"));
@@ -38,14 +41,12 @@ AAn_Player::AAn_Player()
 		GetMesh()->SetSkeletalMesh(tempMesh.Object);
 		GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -90), FRotator(0, -90, 0));
 	}
-
 }
 
 // Called when the game starts or when spawned
 void AAn_Player::BeginPlay()
 {
 	Super::BeginPlay();
-	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
 
 }
 
@@ -54,13 +55,6 @@ void AAn_Player::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//Player이동
-	dir = FTransform(GetControlRotation()).TransformVector(dir);
-	dir.Normalize();
-
-	AddMovementInput(dir);
-
-	dir = FVector::ZeroVector;
 }
 
 // Called to bind functionality to input
@@ -68,52 +62,7 @@ void AAn_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AAn_Player::OnAxisMoveForward);
-	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AAn_Player::OnAxisMoveRight);
-	PlayerInputComponent->BindAction(TEXT("JUMP"), IE_Pressed, this, &AAn_Player::OnActionJump);
-	PlayerInputComponent->BindAction(TEXT("Run"), IE_Pressed, this, &AAn_Player::OnActionRunPressed);
-	PlayerInputComponent->BindAction(TEXT("Run"), IE_Released, this, &AAn_Player::OnActionRunReleased);
-	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Pressed, this, &AAn_Player::OnActionCruchPressed);
-	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Released, this, &AAn_Player::OnActionCruchReleased);
+	onPlayerInputBindingDelegate.Broadcast(PlayerInputComponent);
 }
 
-void AAn_Player::OnAxisMoveForward(float value)
-{
-	dir.X = value;
-}
-
-void AAn_Player::OnAxisMoveRight(float value)
-{
-	dir.Y = value;
-}
-
-void AAn_Player::OnActionJump()
-{
-	ACharacter::Jump();
-}
-
-void AAn_Player::OnActionRunPressed()
-{
-	if (!isCrouch)
-	{
-		GetCharacterMovement()->MaxWalkSpeed = runSpeed;
-	}
-}
-
-void AAn_Player::OnActionRunReleased()
-{
-	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
-}
-
-void AAn_Player::OnActionCruchPressed()
-{
-	GetCharacterMovement()->MaxWalkSpeed = CruchSpeed;
-	isCrouch = true;
-}
-
-void AAn_Player::OnActionCruchReleased()
-{
-	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
-	isCrouch = false;
-}
 

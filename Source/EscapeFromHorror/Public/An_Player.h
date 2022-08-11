@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "An_Player.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(OnPlayerInputBindingDelegate, class UInputComponent*); // (델리게이트 이름 , 넘겨받을 타입)
 
 UCLASS()
 class ESCAPEFROMHORROR_API AAn_Player : public ACharacter
@@ -28,26 +29,16 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 public:
+
+	OnPlayerInputBindingDelegate onPlayerInputBindingDelegate;
+
 	UPROPERTY(EditAnywhere)
 	class USpringArmComponent* springArmComp;
 
 	UPROPERTY(EditAnywhere)
 	class UCameraComponent* cameraComp;
 
-	FVector dir; //플레이어 이동 방향 속성
-	float CruchSpeed = 100;
-	float walkSpeed = 150;
-	float runSpeed = 250;
+	UPROPERTY(EditAnywhere)
+	class UAn_PlayerBaseComp* moveComp;
 
-	bool isCrouch;
-
-	void OnAxisMoveForward(float value);
-	void OnAxisMoveRight(float value);
-	void OnActionJump();
-
-
-	void OnActionRunPressed();
-	void OnActionRunReleased();
-	void OnActionCruchPressed();
-	void OnActionCruchReleased();
 };
