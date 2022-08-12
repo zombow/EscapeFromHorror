@@ -33,6 +33,7 @@ public:
 	float walkSpeed = 150;
 	float runSpeed = 250;
 
+
 	bool isCrouch;
 	bool isClimb;
 

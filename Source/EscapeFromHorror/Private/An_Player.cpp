@@ -22,7 +22,7 @@ AAn_Player::AAn_Player()
 	springArmComp->SetupAttachment(RootComponent);
 	springArmComp->TargetArmLength = 500;
 	springArmComp->SetWorldLocation(FVector(0, 0, 100));
-
+	
 	//camera »ý¼ººÎ
 	cameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("cameraComp"));
 	cameraComp->SetupAttachment(springArmComp);
@@ -54,7 +54,6 @@ void AAn_Player::BeginPlay()
 void AAn_Player::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
