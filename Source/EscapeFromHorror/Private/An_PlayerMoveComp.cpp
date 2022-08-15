@@ -27,10 +27,16 @@ void UAn_PlayerMoveComp::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	dir = FTransform(me->GetControlRotation()).TransformVector(dir);
 	dir.Normalize();
 
-	me->AddMovementInput(dir);
 	if (isClimb)
 	{
 		//클라임시 앞으로가는벡터를 윗방향을 바꿔줌
+		FVector climbUp = UKismetMathLibrary::GetUpVector(FRotator(0,0,0));
+		me->AddMovementInput(climbUp,me->GetInputAxisKeyValue("A"));//입력키 받기
+		UE_LOG(LogTemp, Warning, TEXT("%d"),climbUp.X);
+	}
+	else
+	{
+		me->AddMovementInput(dir);
 	}
 
 	dir = FVector::ZeroVector;
@@ -132,8 +138,10 @@ void UAn_PlayerMoveComp::OnActionClimbPressed()
 			auto climbwallNormal = hitInfo.Normal;
 			me->SetActorRotation(FRotator(0, (UKismetMathLibrary::Conv_VectorToRotator(climbwallNormal).Yaw -180), 0)); //나의 Yaw값을 상대방의 Yaw값과 동일하게 회전
 			//나의 movemode를 fly로 바꾸고 벽타는 행동(tick)
-			auto myMovestate = me->GetCharacterMovement(); //UCharacterMovementComponent*
-			myMovestate->SetMovementMode(MOVE_Flying);
+			auto myMovement = me->GetCharacterMovement(); //UCharacterMovementComponent*
+			myMovement->Velocity = FVector::ZeroVector; // velocity를 0으로 만들기
+			myMovement->SetMovementMode(MOVE_Flying);
+			//myMovement->bOrientRotationToMovement = false; //캐릭터회전 자동보간 사용여부
 		}
 		
 	}
