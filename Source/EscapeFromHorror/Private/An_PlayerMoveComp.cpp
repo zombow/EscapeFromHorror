@@ -16,7 +16,9 @@ void UAn_PlayerMoveComp::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	me->GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
+	myMovement->MaxWalkSpeed = walkSpeed;
+	myMovement->MaxFlySpeed = climbSpeed;
+	myMovement->BrakingDecelerationFlying = 500;
 
 }
 
@@ -29,10 +31,9 @@ void UAn_PlayerMoveComp::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 
 	if (isClimb)
 	{
-		//클라임시 앞으로가는벡터를 윗방향을 바꿔줌
-		FVector climbUp = UKismetMathLibrary::GetUpVector(FRotator(0,0,0));
-		me->AddMovementInput(climbUp,me->GetInputAxisKeyValue("A"));//입력키 받기
-		UE_LOG(LogTemp, Warning, TEXT("%d"),climbUp.X);
+		me->AddMovementInput(climbUp, me->GetInputAxisValue("MoveForward"));//입력키 받기
+		UE_LOG(LogTemp, Warning, TEXT("%d"), climbUp.X);
+		InClimb();
 	}
 	else
 	{
@@ -72,30 +73,34 @@ void UAn_PlayerMoveComp::OnAxisMoveRight(float value)
 void UAn_PlayerMoveComp::OnActionJump()
 {
 	me->ACharacter::Jump();
+	if (isClimb)
+	{
+		//me->ACharacter::LaunchCharacter(); //클라이밍중 스페이스바 입력시 플레이어 발사 11:52초
+	}
 }
 
 void UAn_PlayerMoveComp::OnActionRunPressed()
 {
 	if (!isCrouch)
 	{
-		me->GetCharacterMovement()->MaxWalkSpeed = runSpeed;
+		myMovement->MaxWalkSpeed = runSpeed;
 	}
 }
 
 void UAn_PlayerMoveComp::OnActionRunReleased()
 {
-	me->GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
+	myMovement->MaxWalkSpeed = walkSpeed;
 }
 
 void UAn_PlayerMoveComp::OnActionCruchPressed()
 {
-	me->GetCharacterMovement()->MaxWalkSpeed = CruchSpeed;
+	myMovement->MaxWalkSpeed = cruchSpeed;
 	isCrouch = true;
 }
 
 void UAn_PlayerMoveComp::OnActionCruchReleased()
 {
-	me->GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
+	myMovement->MaxWalkSpeed = walkSpeed;
 	isCrouch = false;
 }
 
@@ -104,12 +109,7 @@ void UAn_PlayerMoveComp::OnActionClimbPressed()
 	//만약 isClimb가 이미 true라면 (이미 벽을타고 있다면)
 	if (isClimb)
 	{
-		//isClimb를 false로바꾸고 
-		isClimb = false;
-		//movemode를 walk로 변경
-		UE_LOG(LogTemp, Warning, TEXT("Un Line"));
-		auto myMovestate = me->GetCharacterMovement(); //UCharacterMovementComponent*
-		me->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+		OutClimb();
 	}
 	else
 	{
@@ -131,19 +131,19 @@ void UAn_PlayerMoveComp::OnActionClimbPressed()
 		//앞에 타고올라갈수 있는 벽이있다면
 		if (isHit)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("get line"));
-			
 			//isClib를 트루로 변경
 			isClimb = true;
 			auto climbwallNormal = hitInfo.Normal;
-			me->SetActorRotation(FRotator(0, (UKismetMathLibrary::Conv_VectorToRotator(climbwallNormal).Yaw -180), 0)); //나의 Yaw값을 상대방의 Yaw값과 동일하게 회전
+			me->SetActorRotation(FRotator(0, (UKismetMathLibrary::Conv_VectorToRotator(climbwallNormal).Yaw - 180), 0)); //나의 Yaw값을 상대방의 Yaw값과 동일하게 회전
 			//나의 movemode를 fly로 바꾸고 벽타는 행동(tick)
-			auto myMovement = me->GetCharacterMovement(); //UCharacterMovementComponent*
+			//auto myMovement = me->GetCharacterMovement(); //UCharacterMovementComponent*
 			myMovement->Velocity = FVector::ZeroVector; // velocity를 0으로 만들기
 			myMovement->SetMovementMode(MOVE_Flying);
-			//myMovement->bOrientRotationToMovement = false; //캐릭터회전 자동보간 사용여부
+			myMovement->bOrientRotationToMovement = false; //캐릭터회전 자동보간 사용여부
+			//클라임시 앞으로가는벡터를 윗방향을 바꿔줌
+			climbUp = UKismetMathLibrary::GetUpVector(FRotator(0, 0, 0));
+			InClimb();
 		}
-		
 	}
 
 }
@@ -152,3 +152,37 @@ void UAn_PlayerMoveComp::OnActionClimbReleased()
 {
 	//미지정
 }
+
+void UAn_PlayerMoveComp::InClimb()
+{
+	FVector start = me->GetMesh()->GetComponentLocation() + FVector(0, 0, 50);
+	FVector end = start + me->GetMesh()->GetRightVector() * 50;
+
+	FHitResult hitInfo;
+	FCollisionQueryParams params;
+	params.AddIgnoredActor(me);
+	//bool UWorld::LineTraceSingleByChannel(struct FHitResult& OutHit, const FVector & Start, const FVector & End, ECollisionChannel TraceChannel, const FCollisionQueryParams & Params /* = FCollisionQueryParams::DefaultQueryParam */, const FCollisionResponseParams & ResponseParam /* = FCollisionResponseParams::DefaultResponseParam */) const
+	//{
+	//	return FPhysicsInterface::RaycastSingle(this, OutHit, Start, End, TraceChannel, Params, ResponseParam, FCollisionObjectQueryParams::DefaultObjectQueryParam);
+	//}
+	bool isHit = GetWorld()->LineTraceSingleByChannel(hitInfo, start, end, ECC_Visibility, params); //받은 정보값 //원하는 물체만 감지할수 있도록 채널설정 필요!
+	DrawDebugLine(GetWorld(), start, end, FColor(255, 0, 0), false, -1, 0, 12.33);
+	if (!isHit)
+	{
+		OutClimb();
+	}
+}
+
+void UAn_PlayerMoveComp::OutClimb()
+{
+	//클라임을 끝내고 원래 상태로돌아오기
+	//isClimb를 false로바꾸고 
+	isClimb = false;
+	//movemode를 walk로 변경
+	UE_LOG(LogTemp, Warning, TEXT("Un Line"));
+	myMovement->SetMovementMode(MOVE_Walking);
+	myMovement->bOrientRotationToMovement = true;
+}
+
+
+

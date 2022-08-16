@@ -24,10 +24,16 @@ public:
 	float speedRight;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float speedUp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool isInAir;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool isCrouch;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool isClimb;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		USoundBase* walkSound;

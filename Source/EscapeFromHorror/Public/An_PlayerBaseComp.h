@@ -29,6 +29,8 @@ public:
 
 	UPROPERTY()
 	class AAn_Player* me;
+	UPROPERTY()
+	class UCharacterMovementComponent* myMovement;
 
 	virtual void PlayerInputBinding(class UInputComponent* PlayerInputComponent)
 	{

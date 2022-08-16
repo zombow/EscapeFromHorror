@@ -29,9 +29,16 @@ protected:
 public:
 
 	FVector dir; //플레이어 이동 방향 속성
-	float CruchSpeed = 100;
+	FVector climbUp; // 클라임시 이동방향 속성
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float cruchSpeed = 100;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float walkSpeed = 150;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float runSpeed = 250;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float climbSpeed = 100;
 
 
 	bool isCrouch;
@@ -50,6 +57,9 @@ public:
 
 	void OnActionClimbPressed();
 	void OnActionClimbReleased();
+
+	void InClimb();
+	void OutClimb();
 };
 
 

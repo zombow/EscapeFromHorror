@@ -17,7 +17,7 @@ UAn_PlayerBaseComp::UAn_PlayerBaseComp()
 void UAn_PlayerBaseComp::InitializeComponent()
 {
 	me = Cast<AAn_Player>(GetOwner());
-
+	myMovement = me->GetCharacterMovement();
 	me->onPlayerInputBindingDelegate.AddUObject(this, &UAn_PlayerBaseComp::PlayerInputBinding);
 }
 
