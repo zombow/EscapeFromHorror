@@ -23,14 +23,14 @@ AAn_Player::AAn_Player()
 	springArmComp->SetWorldLocation(FVector(0, 0, 100));
 	
 	//camera 생성부
-	cameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("cameraComp"));
-	cameraComp->SetupAttachment(springArmComp);
+	//cameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("cameraComp"));
+	//cameraComp->SetupAttachment(springArmComp);
 	// +카메라 위치설정 추후 수정필요!
 	
 	//카메라와 캐릭터간 작용을 구분
 	bUseControllerRotationYaw = false; //Yaw값에 의해 캐릭터가 회전하는것을 차단
 	springArmComp->bUsePawnControlRotation = true; //springArm이 컨트롤러의 영향을 독립적으로 받음
-	cameraComp->bUsePawnControlRotation = false; //카메라는 springArm이 이미 영향을받기에 적용 받지않게끔 off
+	//cameraComp->bUsePawnControlRotation = false; //카메라는 springArm이 이미 영향을받기에 적용 받지않게끔 off
 
 	//mesh 적용부
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> tempMesh(TEXT("SkeletalMesh'/Game/An/an_Source/an_player/an_all/LittleNightmareMarine.LittleNightmareMarine'"));
