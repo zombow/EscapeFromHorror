@@ -40,9 +40,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float climbSpeed = 100;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAnimMontage* climUpAnimMontage;
+
 
 	bool isCrouch;
 	bool isClimb;
+	bool isClimbUp;
+	float myYaw;
 
 	void OnAxisMoveForward(float value);
 	void OnAxisMoveRight(float value);
@@ -60,6 +65,8 @@ public:
 
 	void InClimb();
 	void OutClimb();
+
+	void PlayClimbUpAnim();
 };
 
 

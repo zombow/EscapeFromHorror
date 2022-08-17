@@ -24,7 +24,6 @@ void UAn_PlayerAnim::NativeUpdateAnimation(float DeltaSeconds)
 		auto myMoveComp = Cast<UAn_PlayerMoveComp>(player->moveComp);
 		isCrouch = myMoveComp->UAn_PlayerMoveComp::isCrouch;
 		isClimb = myMoveComp->UAn_PlayerMoveComp::isClimb;
-
 	};
 
 }
@@ -53,6 +52,7 @@ void UAn_PlayerAnim::RandSoundPlay()
 {
 	UGameplayStatics::PlaySound2D(this, randSound);
 }
+
 
 
 

@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 UAn_PlayerMoveComp::UAn_PlayerMoveComp()
 {
@@ -32,7 +33,6 @@ void UAn_PlayerMoveComp::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	if (isClimb)
 	{
 		me->AddMovementInput(climbUp, me->GetInputAxisValue("MoveForward"));//입력키 받기
-		UE_LOG(LogTemp, Warning, TEXT("%d"), climbUp.X);
 		InClimb();
 	}
 	else
@@ -75,7 +75,9 @@ void UAn_PlayerMoveComp::OnActionJump()
 	me->ACharacter::Jump();
 	if (isClimb)
 	{
-		//me->ACharacter::LaunchCharacter(); //클라이밍중 스페이스바 입력시 플레이어 발사 11:52초
+		FVector climbJump = me->GetActorForwardVector() * -100;
+		me->ACharacter::LaunchCharacter(FVector(climbJump.X, climbJump.Y, 0), false, false); //클라이밍중 스페이스바 입력시 플레이어 발사
+		OutClimb();
 	}
 }
 
@@ -129,6 +131,7 @@ void UAn_PlayerMoveComp::OnActionClimbPressed()
 		DrawDebugLine(GetWorld(), start, end, FColor(255, 0, 0), false, -1, 0, 12.33);
 		//LinTracer 구현부 끝-------
 		//앞에 타고올라갈수 있는 벽이있다면
+		//UE_LOG(LogTemp, Warning, TEXT("%s"),hitInfo.GetComponent().ToString()); hitinfo 정보 가져오기
 		if (isHit)
 		{
 			//isClib를 트루로 변경
@@ -155,6 +158,26 @@ void UAn_PlayerMoveComp::OnActionClimbReleased()
 
 void UAn_PlayerMoveComp::InClimb()
 {
+	if (!isClimbUp)
+	{
+		//정상 감지 라인트레이스
+		FVector topStart = me->GetMesh()->GetComponentLocation() + FVector(0, 0, 55);
+		FVector topEnd = topStart + me->GetMesh()->GetRightVector() * 50;
+		DrawDebugLine(GetWorld(), topStart, topEnd, FColor(0, 255, 0), false, -1, 0, 12.33);
+
+		FHitResult hitTopInfo;
+		FCollisionQueryParams topParams;
+		topParams.AddIgnoredActor(me);
+		bool isTop = GetWorld()->LineTraceSingleByChannel(hitTopInfo, topStart, topEnd, ECC_Visibility, topParams);
+		if (!isTop)
+		{
+			myYaw = me->GetActorRotation().Yaw;
+			isClimbUp = true;
+			isClimb = false;
+			PlayClimbUpAnim();
+		}
+	}
+	// 유지 라인트레이스
 	FVector start = me->GetMesh()->GetComponentLocation() + FVector(0, 0, 50);
 	FVector end = start + me->GetMesh()->GetRightVector() * 50;
 
@@ -173,16 +196,29 @@ void UAn_PlayerMoveComp::InClimb()
 	}
 }
 
+	//클라임을 끝내고 원래 상태로돌아오기
 void UAn_PlayerMoveComp::OutClimb()
 {
-	//클라임을 끝내고 원래 상태로돌아오기
 	//isClimb를 false로바꾸고 
 	isClimb = false;
 	//movemode를 walk로 변경
-	UE_LOG(LogTemp, Warning, TEXT("Un Line"));
 	myMovement->SetMovementMode(MOVE_Walking);
 	myMovement->bOrientRotationToMovement = true;
 }
+
+void UAn_PlayerMoveComp::PlayClimbUpAnim()
+{
+	int delaytime = me->ACharacter::PlayAnimMontage(climUpAnimMontage);
+	FTimerHandle WaitHandle;
+	GetWorld()->GetTimerManager().SetTimer(WaitHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			isClimbUp = false;
+			me->SetActorRotation(FRotator(0, myYaw, 0));
+			OutClimb();
+		}), delaytime, false);
+}
+
+
 
 
 

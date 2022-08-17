@@ -46,6 +46,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		USoundBase* randSound;
 
+
 	UFUNCTION(BlueprintCallable)
 		void WalkSoundPlay();
 	UFUNCTION(BlueprintCallable)
