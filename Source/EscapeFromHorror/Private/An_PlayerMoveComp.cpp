@@ -5,6 +5,7 @@
 #include "An_Player.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "DrawDebugHelpers.h"
+#include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -118,7 +119,7 @@ void UAn_PlayerMoveComp::OnActionClimbPressed()
 		//인터렉션키를 눌렀을때 lineTrace 발사
 		//LinTracer 구현부-------
 		FVector start = me->GetMesh()->GetComponentLocation() + FVector(0, 0, 50);
-		FVector end = start + me->GetMesh()->GetRightVector()* 50;
+		FVector end = start + me->GetMesh()->GetRightVector()* 40;
 
 		FHitResult hitInfo;
 		FCollisionQueryParams params;
@@ -131,8 +132,10 @@ void UAn_PlayerMoveComp::OnActionClimbPressed()
 		DrawDebugLine(GetWorld(), start, end, FColor(255, 0, 0), false, -1, 0, 12.33);
 		//LinTracer 구현부 끝-------
 		//앞에 타고올라갈수 있는 벽이있다면
-		//UE_LOG(LogTemp, Warning, TEXT("%s"),hitInfo.GetComponent().ToString()); hitinfo 정보 가져오기
-		if (isHit)
+		//FString myinfo = hitInfo.GetActor()->GetFName().ToString();
+		//UE_LOG(LogTemp, Warning, TEXT("%s"), myinfo);
+		
+		if (isHit && (hitInfo.GetActor()->GetFName() == "BP_Climble"))
 		{
 			//isClib를 트루로 변경
 			isClimb = true;
@@ -162,7 +165,7 @@ void UAn_PlayerMoveComp::InClimb()
 	{
 		//정상 감지 라인트레이스
 		FVector topStart = me->GetMesh()->GetComponentLocation() + FVector(0, 0, 55);
-		FVector topEnd = topStart + me->GetMesh()->GetRightVector() * 50;
+		FVector topEnd = topStart + me->GetMesh()->GetRightVector() * 40;
 		DrawDebugLine(GetWorld(), topStart, topEnd, FColor(0, 255, 0), false, -1, 0, 12.33);
 
 		FHitResult hitTopInfo;
@@ -179,7 +182,7 @@ void UAn_PlayerMoveComp::InClimb()
 	}
 	// 유지 라인트레이스
 	FVector start = me->GetMesh()->GetComponentLocation() + FVector(0, 0, 50);
-	FVector end = start + me->GetMesh()->GetRightVector() * 50;
+	FVector end = start + me->GetMesh()->GetRightVector() * 40;
 
 	FHitResult hitInfo;
 	FCollisionQueryParams params;
