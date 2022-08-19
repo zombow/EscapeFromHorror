@@ -5,7 +5,6 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "An_PlayerAnim.h"
 #include "An_PlayerMoveComp.h"
-#include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values

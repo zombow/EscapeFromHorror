@@ -131,11 +131,9 @@ void UAn_PlayerMoveComp::OnActionClimbPressed()
 		bool isHit = GetWorld()->LineTraceSingleByChannel(hitInfo, start, end, ECC_Visibility, params); //받은 정보값 //원하는 물체만 감지할수 있도록 채널설정 필요!
 		DrawDebugLine(GetWorld(), start, end, FColor(255, 0, 0), false, -1, 0, 12.33);
 		//LinTracer 구현부 끝-------
-		//앞에 타고올라갈수 있는 벽이있다면
-		//FString myinfo = hitInfo.GetActor()->GetFName().ToString();
-		//UE_LOG(LogTemp, Warning, TEXT("%s"), myinfo);
-		
-		if (isHit && (hitInfo.GetActor()->GetFName() == "BP_Climble"))
+
+		//앞에 타고올라갈수 있는 벽이있다면(compoenent이름이 Climb라면)
+		if (isHit && (hitInfo.GetComponent()->GetFName() == "Climb"))
 		{
 			//isClib를 트루로 변경
 			isClimb = true;
