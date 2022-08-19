@@ -13,3 +13,8 @@ void AAn_CameraActor::BeginPlay()
 
 	//UKismetMathLibrary::FindLookAtRotation(FVector(me->GetActorLocation()) ,FVector(player->GetActorLocation()));
 }
+
+void AAn_CameraActor::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+}
