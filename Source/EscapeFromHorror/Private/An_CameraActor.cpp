@@ -9,7 +9,19 @@ void AAn_CameraActor::BeginPlay()
 {
 	Super::BeginPlay();
 	me = GetOwner();
-	player = Cast<AAn_Player>(GetWorld()->GetFirstPlayerController()->GetOwner());
+	UE_LOG(LogTemp, Warning, TEXT("!!!"));
+}
 
-	//UKismetMathLibrary::FindLookAtRotation(FVector(me->GetActorLocation()) ,FVector(player->GetActorLocation()));
+void AAn_CameraActor::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	if(player == nullptr)
+	{
+		player = Cast<AAn_Player>(GetWorld()->GetFirstPlayerController()->GetOwner());
+		UE_LOG(LogTemp, Warning,TEXT("!!!"));
+	}
+	
+	UKismetMathLibrary::FindLookAtRotation(FVector(me->GetActorLocation()), FVector(player->GetActorLocation()));
+	UE_LOG(LogTemp, Warning, TEXT("!!!"));
+	
 }
