@@ -26,8 +26,9 @@ protected:
 public:
 
 	UPROPERTY(EditAnywhere)
-	class USpringArmComponent* springArmComp;
+	class UCameraComponent* camera;
 
-	UPROPERTY(EditAnywhere)
-	class UCameraComponent* cameraComp;
+	//UPROPERTY(EditAnywhere)
+	//class USpringArmComponent* springArm;
+
 };

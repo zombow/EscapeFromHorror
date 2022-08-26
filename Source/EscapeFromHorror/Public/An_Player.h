@@ -33,16 +33,7 @@ public:
 	OnPlayerInputBindingDelegate onPlayerInputBindingDelegate;
 
 	UPROPERTY(EditAnywhere)
-	class USpringArmComponent* springArmComp;
-
-	UPROPERTY(EditAnywhere)
-	class UCameraComponent* cameraComp;
-
-	//UPROPERTY(EditAnywhere)
-	//class UAn_PlayerBaseComp* cameraComp;
-
-	//UPROPERTY(EditAnywhere)
-	//class UAn_PlayerBaseComp* springArmComp;
+	class UAn_PlayerBaseComp* cameraComp;
 
 	UPROPERTY(EditAnywhere)
 	class UAn_PlayerBaseComp* moveComp;
