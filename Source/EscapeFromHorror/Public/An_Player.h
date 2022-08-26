@@ -38,6 +38,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UCameraComponent* cameraComp;
 
+	//UPROPERTY(EditAnywhere)
+	//class UAn_PlayerBaseComp* cameraComp;
+
+	//UPROPERTY(EditAnywhere)
+	//class UAn_PlayerBaseComp* springArmComp;
+
 	UPROPERTY(EditAnywhere)
 	class UAn_PlayerBaseComp* moveComp;
 
