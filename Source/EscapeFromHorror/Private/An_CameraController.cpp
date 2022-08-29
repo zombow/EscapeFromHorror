@@ -5,7 +5,10 @@
 
 #include "An_Player.h"
 #include "Camera/CameraActor.h"
+#include "Components/BoxComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "An_PlayerCameraComp.h"
+#include "Camera/CameraComponent.h"
 
 // Sets default values
 AAn_CameraController::AAn_CameraController()
@@ -13,6 +16,8 @@ AAn_CameraController::AAn_CameraController()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	boxComp = CreateDefaultSubobject<UBoxComponent>("BoxComp");
+	boxComp->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -21,17 +26,15 @@ void AAn_CameraController::BeginPlay()
 	Super::BeginPlay();
 	
 	player =Cast<AAn_Player>(GetWorld()->GetFirstPlayerController()->GetCharacter());
-
+	playerCamera = Cast<UAn_PlayerCameraComp>(player->cameraComp);
+	
 }
 
 // Called every frame
 void AAn_CameraController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//UE_LOG(LogTemp, Warning, TEXT("%s"), *player->GetName());
 
-	CameraMove();
-	CameraLook();
 }
 
 // Called to bind functionality to input
@@ -39,17 +42,18 @@ void AAn_CameraController::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+
 }
 
-void AAn_CameraController::CameraMove()
+void AAn_CameraController::OnNextMap()
 {
-	playerCam->SetActorLocation(FVector((player->GetActorLocation().X * xPower) + xValue,
-		(player->GetActorLocation().Y * yPower) + yValue, 
-		(player->GetActorLocation().Z * zPower) + zValue));
+	if (stageNumber == 1) {
+		playerCamera->cameraState = EcameraState::stage1;
+	}
+	else if(stageNumber == 2){
+		playerCamera->cameraState = EcameraState::stage2;
+	}
+	else{
+		playerCamera->cameraState = EcameraState::stage3;
+	}
 }
-
-void AAn_CameraController::CameraLook()
-{
-	playerCam->SetActorRotation(UKismetMathLibrary::FindLookAtRotation(playerCam->GetActorLocation(), player->GetActorLocation()));
-}
-

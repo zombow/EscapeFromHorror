@@ -19,7 +19,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -28,25 +28,17 @@ public:
 
 public:
 
-	class AAn_Player* player;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MapNumber")
+		int stageNumber = 1;
+	UPROPERTY()
+		class AAn_Player* player;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class ACameraActor* playerCam;
+	UPROPERTY()
+		class UBoxComponent* boxComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int xValue;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int yValue;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int zValue;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float xPower;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float yPower;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float zPower;
+	UPROPERTY()
+		class UAn_PlayerCameraComp* playerCamera;
 
-	void CameraMove();
-
-	void CameraLook();
+	UFUNCTION(BlueprintCallable, Category = "OnMapFunction")
+	void OnNextMap();
 };

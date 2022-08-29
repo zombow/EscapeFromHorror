@@ -9,6 +9,14 @@
 /**
  * 
  */
+UENUM(BlueprintType)
+enum class EcameraState : uint8
+{
+	stage1,
+	stage2,
+	stage3
+};
+
 UCLASS()
 class ESCAPEFROMHORROR_API UAn_PlayerCameraComp : public UAn_PlayerBaseComp
 {
@@ -28,7 +36,24 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UCameraComponent* camera;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FVector> cameraPositions_1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FVector> cameraPositions_2;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FVector> cameraPositions_3;
+
+	UPROPERTY(EditAnywhere)
+	TArray<FVector> currntCameraState;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float moveSpeed = 0.05;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float turnSpeed = 0.05;
+
+	EcameraState cameraState;
+
 	//UPROPERTY(EditAnywhere)
 	//class USpringArmComponent* springArm;
-
+	
 };
