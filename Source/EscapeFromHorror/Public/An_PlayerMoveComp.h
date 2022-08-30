@@ -43,6 +43,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UAnimMontage* climUpAnimMontage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool pressG;
 
 	bool isCrouch;
 	bool isClimb;

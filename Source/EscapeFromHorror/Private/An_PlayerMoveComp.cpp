@@ -57,7 +57,8 @@ void UAn_PlayerMoveComp::PlayerInputBinding(class UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Pressed, this, &UAn_PlayerMoveComp::OnActionCruchPressed);
 	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Released, this, &UAn_PlayerMoveComp::OnActionCruchReleased);
 
-	PlayerInputComponent->BindAction(TEXT("Interact"), IE_Released, this, & UAn_PlayerMoveComp::OnActionClimbPressed);
+	PlayerInputComponent->BindAction(TEXT("Interact"), IE_Pressed, this, &UAn_PlayerMoveComp::OnActionClimbPressed);
+	PlayerInputComponent->BindAction(TEXT("Interact"), IE_Released, this, & UAn_PlayerMoveComp::OnActionClimbReleased);
 }
 
 
@@ -109,6 +110,7 @@ void UAn_PlayerMoveComp::OnActionCruchReleased()
 
 void UAn_PlayerMoveComp::OnActionClimbPressed()
 {
+	pressG = true;
 	//만약 isClimb가 이미 true라면 (이미 벽을타고 있다면)
 	if (isClimb)
 	{
@@ -154,7 +156,7 @@ void UAn_PlayerMoveComp::OnActionClimbPressed()
 
 void UAn_PlayerMoveComp::OnActionClimbReleased()
 {
-	//미지정
+	pressG = false;
 }
 
 void UAn_PlayerMoveComp::InClimb()
