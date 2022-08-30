@@ -50,10 +50,13 @@ void AAn_CameraController::OnNextMap()
 	if (stageNumber == 1) {
 		playerCamera->cameraState = EcameraState::stage1;
 	}
-	else if(stageNumber == 2){
+	else if (stageNumber == 2) {
 		playerCamera->cameraState = EcameraState::stage2;
 	}
-	else{
+	else if (stageNumber == 3) {
 		playerCamera->cameraState = EcameraState::stage3;
 	}
+	else
+		playerCamera->cameraState = EcameraState::stage4;
+
 }

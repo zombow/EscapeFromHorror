@@ -14,7 +14,8 @@ enum class EcameraState : uint8
 {
 	stage1,
 	stage2,
-	stage3
+	stage3,
+	stage4
 };
 
 UCLASS()
@@ -42,7 +43,11 @@ public:
 	TArray<FVector> cameraPositions_2;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FVector> cameraPositions_3;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FVector> cameraPositions_4;
 
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UCameraShakeBase> cameraShake;
 	UPROPERTY(EditAnywhere)
 	TArray<FVector> currntCameraState;
 	

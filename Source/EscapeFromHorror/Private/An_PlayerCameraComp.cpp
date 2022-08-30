@@ -38,6 +38,7 @@ void UAn_PlayerCameraComp::BeginPlay()
 	me->bUseControllerRotationYaw = false;
 	me->bUseControllerRotationRoll = false;
 
+	camera->SetWorldLocation(me->GetActorLocation() + FVector(-400, 0, 100));
 	cameraState = EcameraState::stage1;
 }
 
@@ -56,24 +57,38 @@ void UAn_PlayerCameraComp::TickComponent(float DeltaTime, ELevelTick TickType,FA
 	case EcameraState::stage3:
 		currntCameraState = cameraPositions_3;
 		break;
+	case EcameraState::stage4:
+		currntCameraState = cameraPositions_4;
+		break;
 	default:
 		break;
 	}
 
-	//카메라 이동시 clamp값
-	FVector cameraMove = FVector(UKismetMathLibrary::Clamp(me->GetActorLocation().X, currntCameraState[0].X, currntCameraState[1].X)
-		, UKismetMathLibrary::Clamp(me->GetActorLocation().Y, currntCameraState[0].Y, currntCameraState[1].Y)
-		, UKismetMathLibrary::Clamp(me->GetActorLocation().Z, currntCameraState[0].Z, currntCameraState[1].Z)+50);
+	if (currntCameraState != cameraPositions_4)
+	{
+		//카메라 이동시 clamp값
+		FVector cameraMove = FVector(UKismetMathLibrary::Clamp(me->GetActorLocation().X, currntCameraState[0].X, currntCameraState[1].X)
+			, UKismetMathLibrary::Clamp(me->GetActorLocation().Y, currntCameraState[0].Y, currntCameraState[1].Y)
+			, UKismetMathLibrary::Clamp(me->GetActorLocation().Z, currntCameraState[0].Z, currntCameraState[1].Z) + 50);
 
-	//clamp로 뽑아낸값을 Lerp로 이동
-	camera->SetWorldLocation(FVector(UKismetMathLibrary::Lerp(camera->GetComponentLocation().X, cameraMove.X, moveSpeed)
-	, UKismetMathLibrary::Lerp(camera->GetComponentLocation().Y, cameraMove.Y, moveSpeed)
-	, UKismetMathLibrary::Lerp(camera->GetComponentLocation().Z, cameraMove.Z, moveSpeed)));
-	
+		//clamp로 뽑아낸값을 Lerp로 이동
+		camera->SetWorldLocation(FVector(UKismetMathLibrary::Lerp(camera->GetComponentLocation().X, cameraMove.X, moveSpeed)
+			, UKismetMathLibrary::Lerp(camera->GetComponentLocation().Y, cameraMove.Y, moveSpeed)
+			, UKismetMathLibrary::Lerp(camera->GetComponentLocation().Z, cameraMove.Z, moveSpeed)));
+	}
+	else
+	{
+		//엔딩씬에서 카메라 움직임
+		FVector cameraMove = FVector(me->GetActorLocation() + FVector(-400, 0 , 100));
+		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->StartCameraShake(cameraShake);
 
-	//카메라 Look lerp이동
-	FRotator lookcamera = UKismetMathLibrary::FindLookAtRotation(camera->GetComponentLocation(), me->GetActorLocation());
-	camera->SetWorldRotation(FRotator(UKismetMathLibrary::Lerp(camera->GetComponentRotation().Pitch, lookcamera.Pitch, turnSpeed)
-	,UKismetMathLibrary::Lerp(camera->GetComponentRotation().Yaw, lookcamera.Yaw, turnSpeed)
-	, UKismetMathLibrary::Lerp(camera->GetComponentRotation().Roll, lookcamera.Roll, turnSpeed)));
+		camera->SetWorldLocation(FVector(UKismetMathLibrary::Lerp(camera->GetComponentLocation().X, cameraMove.X, moveSpeed)
+			, UKismetMathLibrary::Lerp(camera->GetComponentLocation().Y, cameraMove.Y, moveSpeed)
+			, UKismetMathLibrary::Lerp(camera->GetComponentLocation().Z, cameraMove.Z, moveSpeed)));
+	}
+		//카메라 Look lerp이동
+		FRotator lookcamera = UKismetMathLibrary::FindLookAtRotation(camera->GetComponentLocation(), me->GetActorLocation());
+		camera->SetWorldRotation(FRotator(UKismetMathLibrary::Lerp(camera->GetComponentRotation().Pitch, lookcamera.Pitch, turnSpeed)
+			, UKismetMathLibrary::Lerp(camera->GetComponentRotation().Yaw, lookcamera.Yaw, turnSpeed)
+			, UKismetMathLibrary::Lerp(camera->GetComponentRotation().Roll, lookcamera.Roll, turnSpeed)));
 }
