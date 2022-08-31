@@ -131,7 +131,6 @@ void UAn_PlayerMoveComp::OnActionClimbPressed()
 		//	return FPhysicsInterface::RaycastSingle(this, OutHit, Start, End, TraceChannel, Params, ResponseParam, FCollisionObjectQueryParams::DefaultObjectQueryParam);
 		//}
 		bool isHit = GetWorld()->LineTraceSingleByChannel(hitInfo, start, end, ECC_Visibility, params); //받은 정보값 //원하는 물체만 감지할수 있도록 채널설정 필요!
-		DrawDebugLine(GetWorld(), start, end, FColor(255, 0, 0), false, -1, 0, 12.33);
 		//LinTracer 구현부 끝-------
 
 		//앞에 타고올라갈수 있는 벽이있다면(compoenent이름이 Climb라면)
@@ -166,7 +165,6 @@ void UAn_PlayerMoveComp::InClimb()
 		//정상 감지 라인트레이스
 		FVector topStart = me->GetMesh()->GetComponentLocation() + FVector(0, 0, 55);
 		FVector topEnd = topStart + me->GetMesh()->GetRightVector() * 40;
-		DrawDebugLine(GetWorld(), topStart, topEnd, FColor(0, 255, 0), false, -1, 0, 12.33);
 
 		FHitResult hitTopInfo;
 		FCollisionQueryParams topParams;
@@ -192,7 +190,6 @@ void UAn_PlayerMoveComp::InClimb()
 	//	return FPhysicsInterface::RaycastSingle(this, OutHit, Start, End, TraceChannel, Params, ResponseParam, FCollisionObjectQueryParams::DefaultObjectQueryParam);
 	//}
 	bool isHit = GetWorld()->LineTraceSingleByChannel(hitInfo, start, end, ECC_Visibility, params); //받은 정보값 //원하는 물체만 감지할수 있도록 채널설정 필요!
-	DrawDebugLine(GetWorld(), start, end, FColor(255, 0, 0), false, -1, 0, 12.33);
 	if (!isHit)
 	{
 		OutClimb();
